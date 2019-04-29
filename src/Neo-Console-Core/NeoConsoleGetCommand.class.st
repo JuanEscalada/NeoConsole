@@ -25,7 +25,7 @@ get status
 Class {
 	#name : #NeoConsoleGetCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #accessing }

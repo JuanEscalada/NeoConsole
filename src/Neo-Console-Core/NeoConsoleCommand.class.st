@@ -10,7 +10,7 @@ Class {
 		'arguments',
 		'result'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #accessing }

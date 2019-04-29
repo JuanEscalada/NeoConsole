@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'server'
 	],
-	#category : #'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Tests'
 }
 
 { #category : #accessing }

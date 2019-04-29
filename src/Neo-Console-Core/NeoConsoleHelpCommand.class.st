@@ -9,7 +9,7 @@ help <command> - print help about <command>
 Class {
 	#name : #NeoConsoleHelpCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }

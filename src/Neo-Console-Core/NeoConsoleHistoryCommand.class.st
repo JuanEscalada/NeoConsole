@@ -13,7 +13,7 @@ history ! - execute the last input again
 Class {
 	#name : #NeoConsoleHistoryCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }

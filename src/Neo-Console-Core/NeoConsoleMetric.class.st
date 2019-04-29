@@ -14,7 +14,7 @@ Class {
 	#classVars : [
 		'KnownMetrics'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Behavior'
 }
 
 { #category : #accessing }

@@ -24,7 +24,7 @@ show Character class>>#euro
 Class {
 	#name : #NeoConsoleShowCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #accessing }

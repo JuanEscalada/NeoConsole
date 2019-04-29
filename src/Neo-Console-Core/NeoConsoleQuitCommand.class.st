@@ -9,7 +9,7 @@ quit - Quit the REPL
 Class {
 	#name : #NeoConsoleQuitCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }

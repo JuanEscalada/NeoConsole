@@ -15,7 +15,7 @@ To list all metrics GET /metrics
 Class {
 	#name : #NeoConsoleMetricDelegate,
 	#superclass : #Object,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Behavior'
 }
 
 { #category : #public }

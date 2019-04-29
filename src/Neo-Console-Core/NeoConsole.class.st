@@ -14,7 +14,7 @@ Class {
 		'History',
 		'Results'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Globals'
 }
 
 { #category : #accessing }

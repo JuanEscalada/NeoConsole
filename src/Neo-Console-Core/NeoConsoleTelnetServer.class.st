@@ -21,7 +21,7 @@ Class {
 		'process',
 		'serverSocket'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Consoles'
 }
 
 { #category : #public }
@@ -31,22 +31,6 @@ NeoConsoleTelnetServer class >> startOn: port [
 	^ self new
 		port: port;
 		start
-]
-
-{ #category : #protocol }
-NeoConsoleTelnetServer >> executeRequestResponseLoopOn: stream [
-	| in out command executeResult |
-	in := ZnCharacterReadStream on: stream.
-	out := ZnCharacterWriteStream on: stream.
-	self writeLine: ('Neo Console ', SystemVersion current asString) to: out.
-	[
-		stream nextPutAll: 'pharo> '; flush.
-		command := (self readInputFrom: in).
-		executeResult := [ command execute ] 
-			on: Error 
-			do: [ :exception | command printString, ' failed with ', exception printString ].
-		self writeOutput: command result to: out.
-		executeResult notNil	] whileTrue
 ]
 
 { #category : #private }
@@ -103,24 +87,6 @@ NeoConsoleTelnetServer >> printOn: stream [
 	stream << $)
 ]
 
-{ #category : #protocol }
-NeoConsoleTelnetServer >> readInputFrom: stream [
-	| input lineReader line commandClass |
-	lineReader := ZnFastLineReader on: stream.
-	line := [ lineReader nextLine trimBoth ] on: ConnectionClosed, ConnectionTimedOut do: [ nil ].
-	line isEmptyOrNil ifTrue: [ ^ NeoConsoleQuitCommand new ].
-	commandClass := NeoConsoleCommand forLine: line.
-	commandClass isSingleLine
-		ifTrue: [ ^ commandClass new on: line; yourself ].
-	input := String new writeStream.
-	input nextPutAll: line; cr.
-	[ 
-		line := [ lineReader nextLine trimBoth ] on: ConnectionClosed, ConnectionTimedOut do: [ '' ].
-		input nextPutAll: line; cr.
-		line isEmpty ] whileFalse.
-	^ commandClass new on: input contents; yourself
-]
-
 { #category : #private }
 NeoConsoleTelnetServer >> releaseServerSocket [
 	(Delay forMilliseconds: 10) wait.
@@ -132,16 +98,20 @@ NeoConsoleTelnetServer >> releaseServerSocket [
 NeoConsoleTelnetServer >> serveConnectionsOn: listeningSocket [
 	"We wait up to acceptWaitTimeout seconds for an incoming connection.
 	If we get one we wrap it in a SocketStream and #executeRequestResponseLoopOn: on it"
-		 
+
 	| stream socket |
 	socket := listeningSocket waitForAcceptFor: 300.
 	socket ifNil: [ ^ self ].
 	stream := self socketStreamOn: socket.
-	[ [ [ self executeRequestResponseLoopOn: stream ]
-		ensure: [ [ stream close ] on: Exception do: [ ] ] ]
-			ifCurtailed: [ socket destroy ] ]
-				forkAt: Processor lowIOPriority
-				named: self workerProcessName 
+	[ [ [ NeoConsoleIOStreamsManager new
+		flush: true;
+		executeRequestResponseLoopOn: stream and: stream ]
+		ensure: [ [ stream close ]
+				on: Exception
+				do: [ :signal |  ] ] ]
+		ifCurtailed: [ socket destroy ] ]
+		forkAt: Processor lowIOPriority
+		named: self workerProcessName
 ]
 
 { #category : #accessing }
@@ -183,17 +153,4 @@ NeoConsoleTelnetServer >> timeout [
 { #category : #accessing }
 NeoConsoleTelnetServer >> workerProcessName [
 	^ self serverProcessName, ' Connection Handler'
-]
-
-{ #category : #protocol }
-NeoConsoleTelnetServer >> writeLine: string to: stream [
-	stream nextPutAll: string; lf; flush
-]
-
-{ #category : #protocol }
-NeoConsoleTelnetServer >> writeOutput: string to: stream [
-	string lines
-		do: [ :each | stream nextPutAll: each ]
-		separatedBy: [ stream lf ].
-	stream lf; flush
 ]

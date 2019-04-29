@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'date'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Logging'
 }
 
 { #category : #constants }

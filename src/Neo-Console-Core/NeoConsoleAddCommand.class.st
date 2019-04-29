@@ -25,7 +25,7 @@ example1
 Class {
 	#name : #NeoConsoleAddCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }

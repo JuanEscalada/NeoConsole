@@ -20,7 +20,7 @@ eval 1+2
 Class {
 	#name : #NeoConsoleEvalCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }

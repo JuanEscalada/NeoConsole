@@ -27,7 +27,7 @@ Class {
 	#classVars : [
 		'UniqueInstance'
 	],
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Globals'
 }
 
 { #category : #accessing }

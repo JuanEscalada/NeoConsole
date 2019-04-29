@@ -20,7 +20,7 @@ describe
 Class {
 	#name : #NeoConsoleDescribeCommand,
 	#superclass : #NeoConsoleCommand,
-	#category : 'Neo-Console-Core'
+	#category : #'Neo-Console-Core-Commands'
 }
 
 { #category : #testing }
