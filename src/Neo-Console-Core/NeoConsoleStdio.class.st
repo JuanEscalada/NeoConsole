@@ -29,7 +29,7 @@ NeoConsoleStdio >> inputInterpreter [
 
 { #category : #public }
 NeoConsoleStdio >> inputInterpreter: anInputInterpreter [
-	inputInterpreter := anInputInterpreter
+	^ inputInterpreter := anInputInterpreter
 ]
 
 { #category : #public }

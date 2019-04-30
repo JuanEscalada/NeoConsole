@@ -5,7 +5,7 @@ The class comments of my subclasses are used as help texts in the command line i
 "
 Class {
 	#name : #NeoConsoleCommand,
-	#superclass : #NeoConsoleCommandBehavior,
+	#superclass : #Object,
 	#instVars : [
 		'arguments',
 		'result'
@@ -38,6 +38,11 @@ NeoConsoleCommand class >> helpText [
 			out << self name; cr.
 			self comment linesDo: [ :each | 
 				out space; space; << each; cr ] ]
+]
+
+{ #category : #testing }
+NeoConsoleCommand class >> isMultiLine [
+	^ self isSingleLine not
 ]
 
 { #category : #testing }
