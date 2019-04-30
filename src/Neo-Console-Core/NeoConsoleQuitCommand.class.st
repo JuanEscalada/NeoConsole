@@ -17,6 +17,11 @@ NeoConsoleQuitCommand class >> handlesLine: line [
 	^ line first = Character end "Ctrl-D" or: [ super handlesLine: line ]
 ]
 
+{ #category : #testing }
+NeoConsoleQuitCommand class >> isQuitCommand [
+	^ true
+]
+
 { #category : #accessing }
 NeoConsoleQuitCommand class >> prefix [
 	^ 'quit'

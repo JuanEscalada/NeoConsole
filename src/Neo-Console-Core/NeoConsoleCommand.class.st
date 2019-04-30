@@ -5,7 +5,7 @@ The class comments of my subclasses are used as help texts in the command line i
 "
 Class {
 	#name : #NeoConsoleCommand,
-	#superclass : #Object,
+	#superclass : #NeoConsoleCommandBehavior,
 	#instVars : [
 		'arguments',
 		'result'
@@ -41,8 +41,8 @@ NeoConsoleCommand class >> helpText [
 ]
 
 { #category : #testing }
-NeoConsoleCommand class >> isMultiLine [
-	^ self isSingleLine not
+NeoConsoleCommand class >> isQuitCommand [
+	^ false
 ]
 
 { #category : #testing }

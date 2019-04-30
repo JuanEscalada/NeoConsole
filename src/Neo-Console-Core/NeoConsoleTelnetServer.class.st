@@ -19,7 +19,8 @@ Class {
 	#instVars : [
 		'port',
 		'process',
-		'serverSocket'
+		'serverSocket',
+		'inputInterpreter'
 	],
 	#category : #'Neo-Console-Core-Consoles'
 }
@@ -43,6 +44,17 @@ NeoConsoleTelnetServer >> initializeServerSocket [
 		interface: NetNameResolver loopBackAddress.
 	serverSocket isValid
 		ifFalse: [ self error: 'Cannot create socket on port ' , self port printString ]
+]
+
+{ #category : #accessing }
+NeoConsoleTelnetServer >> inputInterpreter [
+	^ inputInterpreter
+		ifNil: [ self inputInterpreter: NeoConsoleInputInterpreter new ]
+]
+
+{ #category : #accessing }
+NeoConsoleTelnetServer >> inputInterpreter: anInputInterpreter [
+	inputInterpreter := anInputInterpreter
 ]
 
 { #category : #testing }
@@ -104,6 +116,7 @@ NeoConsoleTelnetServer >> serveConnectionsOn: listeningSocket [
 	socket ifNil: [ ^ self ].
 	stream := self socketStreamOn: socket.
 	[ [ [ NeoConsoleIOStreamsManager new
+		inputInterpreter: self inputInterpreter;
 		flush: true;
 		executeRequestResponseLoopOn: stream and: stream ]
 		ensure: [ [ stream close ]
