@@ -15,12 +15,13 @@ Security warning: this service opens up your image for access to those with acce
 "
 Class {
 	#name : #NeoConsoleTelnetServer,
-	#superclass : #Object,
+	#superclass : #NeoConsoleBehavior,
 	#instVars : [
 		'port',
 		'process',
 		'serverSocket',
-		'inputInterpreter'
+		'stream',
+		'socket'
 	],
 	#category : #'Neo-Console-Core-Consoles'
 }
@@ -32,6 +33,18 @@ NeoConsoleTelnetServer class >> startOn: port [
 	^ self new
 		port: port;
 		start
+]
+
+{ #category : #protocol }
+NeoConsoleTelnetServer >> closeSocketStream [
+	^ [ stream close ]
+		on: Exception
+		do: [ :signal |  ]
+]
+
+{ #category : #protocol }
+NeoConsoleTelnetServer >> flush [
+	^ true
 ]
 
 { #category : #private }
@@ -46,15 +59,19 @@ NeoConsoleTelnetServer >> initializeServerSocket [
 		ifFalse: [ self error: 'Cannot create socket on port ' , self port printString ]
 ]
 
-{ #category : #accessing }
-NeoConsoleTelnetServer >> inputInterpreter [
-	^ inputInterpreter
-		ifNil: [ self inputInterpreter: NeoConsoleInputInterpreter new ]
+{ #category : #protocol }
+NeoConsoleTelnetServer >> initializeSocketAndStreamRelatedTo: listeningSocket onFailure: block [
+	"We wait up to acceptWaitTimeout seconds for an incoming connection.
+	If we get one we wrap it in a SocketStream and run the console loop on it"
+
+	socket := listeningSocket waitForAcceptFor: 300.
+	socket ifNil: block.
+	stream := self socketStreamOn: socket
 ]
 
-{ #category : #accessing }
-NeoConsoleTelnetServer >> inputInterpreter: anInputInterpreter [
-	inputInterpreter := anInputInterpreter
+{ #category : #protocol }
+NeoConsoleTelnetServer >> inputStream [
+	^ stream
 ]
 
 { #category : #testing }
@@ -79,6 +96,11 @@ NeoConsoleTelnetServer >> listenLoop [
 		self serveConnectionsOn: serverSocket ] repeat ]
 
 		ifCurtailed: [ self releaseServerSocket ]
+]
+
+{ #category : #protocol }
+NeoConsoleTelnetServer >> outputStream [
+	^ stream
 ]
 
 { #category : #accessing }
@@ -108,20 +130,11 @@ NeoConsoleTelnetServer >> releaseServerSocket [
 
 { #category : #protocol }
 NeoConsoleTelnetServer >> serveConnectionsOn: listeningSocket [
-	"We wait up to acceptWaitTimeout seconds for an incoming connection.
-	If we get one we wrap it in a SocketStream and #executeRequestResponseLoopOn: on it"
-
-	| stream socket |
-	socket := listeningSocket waitForAcceptFor: 300.
-	socket ifNil: [ ^ self ].
-	stream := self socketStreamOn: socket.
-	[ [ [ NeoConsoleIOStreamsManager new
-		inputInterpreter: self inputInterpreter;
-		flush: true;
-		executeRequestResponseLoopOn: stream and: stream ]
-		ensure: [ [ stream close ]
-				on: Exception
-				do: [ :signal |  ] ] ]
+	self
+		initializeSocketAndStreamRelatedTo: listeningSocket
+		onFailure: [ ^ self ].
+	[ [ [ self run ]
+		ensure: [ self closeSocketStream ] ]
 		ifCurtailed: [ socket destroy ] ]
 		forkAt: Processor lowIOPriority
 		named: self workerProcessName
@@ -133,12 +146,12 @@ NeoConsoleTelnetServer >> serverProcessName [
 ]
 
 { #category : #private }
-NeoConsoleTelnetServer >> socketStreamOn: socket [
-	^ (ZdcSocketStream on: socket)
+NeoConsoleTelnetServer >> socketStreamOn: aSocket [
+	^ (ZdcSocketStream on: aSocket)
 		binary;
 		shouldSignal: true;
 		autoFlush: false;
-		timeout: self timeout;
+		timeout: 60;
 		yourself
 ]
 
@@ -152,15 +165,10 @@ NeoConsoleTelnetServer >> start [
 
 { #category : #public }
 NeoConsoleTelnetServer >> stop [
-	self isRunning ifFalse: [ ^ self ].
-	process terminate. 
-	process := nil.
-
-]
-
-{ #category : #accessing }
-NeoConsoleTelnetServer >> timeout [
-	^ 60
+	self isRunning
+		ifFalse: [ ^ self ].
+	process terminate.
+	process := nil
 ]
 
 { #category : #accessing }

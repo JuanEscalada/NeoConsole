@@ -9,33 +9,26 @@ Security warning: this service opens up your image for access to those with acce
 "
 Class {
 	#name : #NeoConsoleStdio,
-	#superclass : #Object,
-	#instVars : [
-		'inputInterpreter'
-	],
+	#superclass : #NeoConsoleBehavior,
 	#category : #'Neo-Console-Core-Consoles'
 }
 
 { #category : #public }
-NeoConsoleStdio class >> run [
-	^ self new run
+NeoConsoleStdio >> flush [
+	^ false
 ]
 
 { #category : #public }
-NeoConsoleStdio >> inputInterpreter [
-	^ inputInterpreter
-		ifNil: [ self inputInterpreter: NeoConsoleInputInterpreter new ]
+NeoConsoleStdio >> inputStream [
+	^ FileStream stdin binary
 ]
 
 { #category : #public }
-NeoConsoleStdio >> inputInterpreter: anInputInterpreter [
-	^ inputInterpreter := anInputInterpreter
+NeoConsoleStdio >> outputStream [
+	^ Stdio stdout
 ]
 
 { #category : #public }
-NeoConsoleStdio >> run [
-	NeoConsoleIOStreamsManager new
-		inputInterpreter: self inputInterpreter;
-		executeRequestResponseLoopOn: FileStream stdin binary
-			and: Stdio stdout
+NeoConsoleStdio >> start [
+	self run
 ]

@@ -1,3 +1,6 @@
+"
+Example interpreter which only responds to the evaluation of pharo code
+"
 Class {
 	#name : #NeoConsoleEvalInterpreter,
 	#superclass : #NeoConsoleInputInterpreterBehavior,

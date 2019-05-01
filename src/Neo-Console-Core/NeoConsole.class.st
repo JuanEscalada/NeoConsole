@@ -55,12 +55,17 @@ NeoConsole class >> results [
 	^ Results ifNil: [ Results := Array new: 3 ]
 ]
 
-{ #category : #server }
+{ #category : #'console starters' }
 NeoConsole class >> startServer [
-	^ NeoConsoleTelnetServer new start
+	^ NeoConsoleTelnetServer start
 ]
 
-{ #category : #server }
+{ #category : #'console starters' }
 NeoConsole class >> startServerOn: port [
 	^ NeoConsoleTelnetServer startOn: port
+]
+
+{ #category : #'console starters' }
+NeoConsole class >> startStdio [
+	^ NeoConsoleStdio start
 ]
