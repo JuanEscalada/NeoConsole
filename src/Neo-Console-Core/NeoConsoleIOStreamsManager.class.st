@@ -60,9 +60,9 @@ NeoConsoleIOStreamsManager >> readInputFrom: stream [
 	| input lineReader line commandClass |
 	lineReader := ZnFastLineReader on: stream.
 	line := self readLineUsing: lineReader.
-	commandClass := self inputInterpreter commandClassForLine: line.
+	commandClass := self inputInterpreter commandForLine: line.
 	commandClass isQuitCommand
-		ifTrue: [ ^ commandClass new ].
+		ifTrue: [ ^ commandClass ].
 	input := String new writeStream.
 	input nextPutAll: line.
 	commandClass isMultiLine
@@ -72,7 +72,7 @@ NeoConsoleIOStreamsManager >> readInputFrom: stream [
 				nextPutAll: line;
 				cr.
 			line isEmpty ] whileFalse ].
-	^ commandClass new
+	^ commandClass
 		on: input contents;
 		yourself
 ]

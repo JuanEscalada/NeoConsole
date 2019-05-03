@@ -40,21 +40,6 @@ NeoConsoleCommand class >> helpText [
 				out space; space; << each; cr ] ]
 ]
 
-{ #category : #testing }
-NeoConsoleCommand class >> isMultiLine [
-	^ self isSingleLine not
-]
-
-{ #category : #testing }
-NeoConsoleCommand class >> isQuitCommand [
-	^ false
-]
-
-{ #category : #testing }
-NeoConsoleCommand class >> isSingleLine [
-	^ true
-]
-
 { #category : #accessing }
 NeoConsoleCommand class >> knownCommands [
 	^ self subclasses
@@ -83,6 +68,21 @@ NeoConsoleCommand >> execute [
 { #category : #testing }
 NeoConsoleCommand >> hasArguments [
 	^ arguments notNil and: [ arguments notEmpty ]
+]
+
+{ #category : #testing }
+NeoConsoleCommand >> isMultiLine [
+	^ self isSingleLine not
+]
+
+{ #category : #testing }
+NeoConsoleCommand >> isQuitCommand [
+	^ false
+]
+
+{ #category : #testing }
+NeoConsoleCommand >> isSingleLine [
+	^ true
 ]
 
 { #category : #private }

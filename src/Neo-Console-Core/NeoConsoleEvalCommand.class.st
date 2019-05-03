@@ -23,11 +23,6 @@ Class {
 	#category : #'Neo-Console-Core-Commands'
 }
 
-{ #category : #testing }
-NeoConsoleEvalCommand class >> isSingleLine [
-	^ false
-]
-
 { #category : #accessing }
 NeoConsoleEvalCommand class >> prefix [
 	^ 'eval'
@@ -48,6 +43,11 @@ NeoConsoleEvalCommand >> execute [
 		limitedTo: self outputLimit.
 	result size < self outputLimit 
 		ifFalse: [ result := result , ' ... (truncated) ...' ]
+]
+
+{ #category : #testing }
+NeoConsoleEvalCommand >> isSingleLine [
+	^ false
 ]
 
 { #category : #'initialization-release' }

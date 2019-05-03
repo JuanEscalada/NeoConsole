@@ -28,11 +28,6 @@ Class {
 	#category : #'Neo-Console-Core-Commands'
 }
 
-{ #category : #testing }
-NeoConsoleAddCommand class >> isSingleLine [
-	^ false
-]
-
 { #category : #accessing }
 NeoConsoleAddCommand class >> prefix [
 	^ 'add'
@@ -56,6 +51,11 @@ NeoConsoleAddCommand >> execute [
 			out print: compileResult ]
 				on: Error , SyntaxErrorNotification
 				do: [ :exception | self logException: exception on: out ] ]
+]
+
+{ #category : #testing }
+NeoConsoleAddCommand >> isSingleLine [
+	^ false
 ]
 
 { #category : #'initialization-release' }

@@ -15,10 +15,10 @@ NeoConsoleInputInterpreterBehavior >> commandClass [
 ]
 
 { #category : #accessing }
-NeoConsoleInputInterpreterBehavior >> commandClassForLine: line [
+NeoConsoleInputInterpreterBehavior >> commandForLine: line [
 	line isEmptyOrNil
-		ifTrue: [ ^ self quitCommandClass ].
-	^ self commandClass forLine: line
+		ifTrue: [ ^ self quitCommandClass new ].
+	^ (self commandClass forLine: line) new
 ]
 
 { #category : #accessing }
