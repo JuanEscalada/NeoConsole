@@ -10,15 +10,10 @@ Class {
 }
 
 { #category : #accessing }
-NeoConsoleInputInterpreterBehavior >> commandClass [
-	self subclassResponsibility
-]
-
-{ #category : #accessing }
 NeoConsoleInputInterpreterBehavior >> commandForLine: line [
 	line isEmptyOrNil
-		ifTrue: [ ^ self quitCommandClass new ].
-	^ (self commandClass forLine: line) new
+		ifTrue: [ ^ self getQuitCommand ].
+	^ self getCommandForLine: line
 ]
 
 { #category : #accessing }
@@ -27,7 +22,12 @@ NeoConsoleInputInterpreterBehavior >> consolePrompt [
 ]
 
 { #category : #accessing }
-NeoConsoleInputInterpreterBehavior >> quitCommandClass [
+NeoConsoleInputInterpreterBehavior >> getCommandForLine: line [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+NeoConsoleInputInterpreterBehavior >> getQuitCommand [
 	self subclassResponsibility
 ]
 

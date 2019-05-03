@@ -22,8 +22,13 @@ NeoConsoleInputInterpreter >> consolePrompt [
 ]
 
 { #category : #accessing }
-NeoConsoleInputInterpreter >> quitCommandClass [
-	^ NeoConsoleQuitCommand
+NeoConsoleInputInterpreter >> getCommandForLine: line [
+	^ (self commandClass forLine: line) new
+]
+
+{ #category : #accessing }
+NeoConsoleInputInterpreter >> getQuitCommand [
+	^ NeoConsoleQuitCommand new
 ]
 
 { #category : #accessing }
